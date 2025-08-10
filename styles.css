@@ -5,11 +5,8 @@
   /* Give it a shape */
   width: 40rem;
   height: 30rem;
-  /* Make it a grid */
-  display: grid;
-  grid-template-columns: repeat(40, 1fr);
-  grid-template-rows: repeat(30, 1fr);
-  gap: 0px;
+  /* Make the canvas work */
+  image-rendering: pixelated;
 }
 
 /* Pixels */
