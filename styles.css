@@ -1,0 +1,29 @@
+/* The painting grid */
+#painting-grid {
+  /* Give it a border */
+  border: 1px solid black;
+  /* Give it a shape */
+  width: 40rem;
+  height: 30rem;
+  /* Make it a grid */
+  display: grid;
+  grid-template-columns: repeat(40, 1fr);
+  grid-template-rows: repeat(30, 1fr);
+  gap: 0px;
+}
+
+/* Pixels */
+.pixel {
+  /* Make it a box */
+  box-sizing: border-box;
+  /* Center the contents */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Works to make the effect look kinda unfilled */
+.color-box {
+  width: 50%;
+  height: 50%;
+}
