@@ -237,7 +237,7 @@ function intialize_canvas_click_listener() {
 function draw_image_in_canvas(poke_num, alpha_value) {
   // Just load the first for now.
   const img = new Image();
-  img.src = `sprites/%23${poke_num}.png`;
+  img.src = `sprites/${poke_num}.png`;
 
   // When the image finishes loading
   img.onload = () => {
