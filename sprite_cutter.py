@@ -29,7 +29,7 @@ for y in range(rows):
             (y + 1) * TILE_HEIGHT
         )
         tile = sprite_sheet.crop(box)
-        tile.save(f"sprites/#{count}.png")
+        tile.save(f"sprites/{count}.png")
         #names[count] = f"sprites/%23{count}.png"
         count += 1
 

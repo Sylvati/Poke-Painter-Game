@@ -276,7 +276,7 @@ function load_into_holder() {
     // Make a new img
     const img = document.createElement("img");
     // Set the src
-    img.src = `sprites/%23${i}.png`;
+    img.src = `sprites/${i}.png`;
     // Add it as a child to the holder
     sprites_holder.appendChild(img);
   }
