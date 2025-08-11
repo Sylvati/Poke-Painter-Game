@@ -4,10 +4,18 @@ TRANSLUCENT = 128;
 TRANSPARENT = 0;
 
 // Fields
+// The header storing the amount of pixels
 let pixel_amount_element;
 
-// Currency
+// Global-ish variables
+// Number of pixels the player has
 let pixels = 0;
+
+// Each pixel's clickability status
+let pixel_clickability = [];
+
+// A list of clickable indices.
+let clickable_indices = [];
 
 // Wait till page loaded
 document.addEventListener("DOMContentLoaded", () => {
@@ -18,17 +26,102 @@ document.addEventListener("DOMContentLoaded", () => {
   load_into_holder();
 
   // Color the pixels in the canvas
-  color_pixels_in_canvas(1, 0.5);
+  draw_image_in_canvas(1, 0.5);
 
-  // Add click listener
+  // Add canvas click listener
   intialize_canvas_click_listener();
+
+  // Add autopainter click listener
+  intialize_autopainter_click_listener();
 });
+
+// Function to initialize autopainter buy button listener
+function intialize_autopainter_click_listener() {
+  // Get the button itself
+  const auto_painter_buy_button = document.getElementById("buy-autoclicker");
+
+  // Find the canvas
+  const canvas = document.getElementById("painting-grid");
+  // Get the context
+  const ctx = canvas.getContext("2d");
+
+  // Add the listener
+  auto_painter_buy_button.addEventListener("click", () => {
+    setInterval(function () {
+      on_canvas_clicked_index(ctx, clickable_indices[0] * 4);
+    }, 100);
+  });
+}
+
+// Function to populate the clickable pixels array
+function populate_clickable_pixels(image_data) {
+  // Create the width * height array
+  pixel_clickability = new Array(image_data.width * image_data.height);
+
+  // Go through it all
+  for (let i = 0; i < pixel_clickability.length; i++) {
+    // Get the alpha of the current pixel
+    const alpha = image_data.data[i * 4 + 3];
+
+    // Perform clickable test once
+    const clickable = alpha !== 0;
+
+    // Set whether its clickable or not
+    pixel_clickability[i] = clickable;
+
+    // Push it to the list
+    if (clickable) {
+      clickable_indices.push(i);
+    }
+  }
+}
+
+// Function to convert x and y and width to an index
+function get_index(image_data, x, y) {
+  // Get the location (y * width + x) * 4, because rgba for each pixel, y is skipping rows.
+  return (y * image_data.width + x) * 4;
+}
 
 // Function to initialize fields
 function initialize_fields() {
   // Initialize the pixel amount header
   pixel_amount_element = document.getElementById("pixel-amount");
   update_pixels();
+}
+
+// Function for on canvas clicked, but like, with index as a paremeter
+function on_canvas_clicked_index(ctx, index) {
+  // Get image data
+  const image_data = ctx.getImageData(
+    0,
+    0,
+    ctx.canvas.width,
+    ctx.canvas.height
+  );
+
+  // Get the color and alpha values
+  const r = image_data.data[index + 0];
+  const g = image_data.data[index + 1];
+  const b = image_data.data[index + 2];
+  const a = image_data.data[index + 3];
+
+  // Log the click
+  //console.log(`Clicked at canvas pixel: (${x}, ${y})`);
+
+  // If clickable,
+  if (is_clickable(index)) {
+    // Set the alpha
+    set_pixel_alpha(image_data, index, OPAQUE);
+
+    // Confirm changes
+    confirm_changes(ctx, image_data, 0, 0);
+
+    // Make sure it doesn't get reclicked
+    set_unclickable(index);
+
+    // Add a pixel
+    add_pixels(1);
+  }
 }
 
 // Function holding all events that happen when the canvas is clicked.
@@ -41,29 +134,29 @@ function on_canvas_clicked(ctx, x, y) {
     ctx.canvas.height
   );
 
-  // Get the location (y * width + x) * 4, because rgba for each pixel, y is skipping rows.
-  const index = (y * image_data.width + x) * 4;
+  // Get index
+  const index = get_index(image_data, x, y);
 
-  // Get the color and alpha values
-  const r = image_data.data[index + 0];
-  const g = image_data.data[index + 1];
-  const b = image_data.data[index + 2];
-  const a = image_data.data[index + 3];
+  // Just run the other one
+  on_canvas_clicked_index(ctx, index);
+}
 
-  // Log the click
-  // console.log(`Clicked at canvas pixel: (${x}, ${y})`);
+// Function to set pixels as clicked
+function set_unclickable(index) {
+  const corr_index = index / 4;
 
-  // If clickable,
-  if (is_clickable(a)) {
-    // Set the alpha
-    set_pixel_alpha(image_data, index, OPAQUE);
+  // Update the clickability array
+  pixel_clickability[corr_index] = false;
 
-    // Confirm changes
-    confirm_changes(ctx, image_data, 0, 0);
+  // Remove from the clickable indices array
+  const pos = clickable_indices.indexOf(corr_index);
 
-    // Add a pixel
-    add_pixels(1);
+  // As long as it exists, that is
+  if (pos !== -1) {
+    clickable_indices.splice(pos, 1);
   }
+
+  //console.log(clickable_indices);
 }
 
 // Function to ensure pixels text is updated
@@ -84,8 +177,8 @@ function subtract_pixels(amount) {
 }
 
 // Function to check for clickability
-function is_clickable(alpha) {
-  return alpha > 0 && alpha < 255;
+function is_clickable(index) {
+  return pixel_clickability[index / 4];
 }
 
 // Function to confirm image_data changes
@@ -141,7 +234,7 @@ function intialize_canvas_click_listener() {
 }
 
 // Function to color the pixels in the canvas
-function color_pixels_in_canvas(poke_num, alpha_value) {
+function draw_image_in_canvas(poke_num, alpha_value) {
   // Just load the first for now.
   const img = new Image();
   img.src = `sprites/%23${poke_num}.png`;
@@ -162,6 +255,14 @@ function color_pixels_in_canvas(poke_num, alpha_value) {
 
     // Draw the image
     ctx.drawImage(img, 0, 0);
+
+    // Revert it
+    ctx.globalAlpha = 1;
+
+    // Populate the clickable pixels array
+    populate_clickable_pixels(
+      ctx.getImageData(0, 0, canvas.width, canvas.height)
+    );
   };
 }
 
