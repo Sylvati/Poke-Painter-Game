@@ -1,0 +1,17 @@
+/* Make bottom panel be long and flexy */
+#bottom-panel {
+  /* Flex */
+  display: flex;
+  /* Makes it spread out evenly */
+  justify-content: space-evenly;
+  /* Give it a bit of color */
+  background-color: #f7f7f7;
+  /* Give it a bit of height */
+  padding: 0rem 0 0rem 0;
+}
+
+/* Make the panels share equal space */
+#bottom-panel > * {
+  /* Each item grows to the same amount */
+  flex: 1;
+}

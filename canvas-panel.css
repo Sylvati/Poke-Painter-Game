@@ -1,0 +1,11 @@
+/* Change margin from headings in top panel */
+#canvas-label {
+  /* Remove margin */
+  margin: 0px;
+  /* Give background-color */
+  background-color: rgb(228, 228, 228);
+  /* Give it some padding */
+  padding: 0.15em 0.5em 0.15em 0.5em;
+  /* Give the border some nice round */
+  border-radius: 0.25em;
+}

@@ -9,20 +9,56 @@
     <!-- Probably wanna change this once I think of a cool name-->
     <title>Document</title>
     <!-- Connecting the js -->
-    <script src="index.js"></script>
+    <script type="module" src="index.js"></script>
     <!-- Connecting the css -->
+    <!-- Contains stuff from everywhere -->
     <link rel="stylesheet" href="styles.css" />
+    <!-- Top panel stuff -->
+    <link rel="stylesheet" href="./top-panel.css" />
+    <!-- Bottom panel stuff -->
+    <link rel="stylesheet" href="./bottom-panel.css" />
+    <!-- Canvas panel stuff -->
+    <link rel="stylesheet" href="./canvas-panel.css" />
   </head>
   <!-- Main body -->
   <body>
-    <p>all sprites are 40x30</p>
-    <!-- Pixel # -->
-    <h1 id="pixel-amount">Pixels: N/A</h1>
-    <!-- Buy autoclicker button -->
-    <button id="buy-autoclicker">Buy Auto Painter</button>
-    <!-- Div where we actually store the pixels -->
-    <canvas id="painting-grid" width="40" height="30"></canvas>
-    <!-- Keep this because it's cool -->
+    <!-- Contains all the ui -->
+    <div id="main-container">
+      <!-- Contains the stats-->
+      <div id="top-panel">
+        <!-- Pixel # -->
+        <h1 id="pixel-amount">Pixels: N/A</h1>
+        <!-- Pixel # -->
+        <h1 id="golden-pixel-amount">Golden Pixels: N/A</h1>
+        <!-- Complete # -->
+        <h1 id="complete-amount">Completes: N/A</h1>
+      </div>
+      <!-- Bottom panel -->
+      <div id="bottom-panel">
+        <!-- Contains the canvas and progress-->
+        <div id="canvas-panel">
+          <!-- Header -->
+          <h1 id="canvas-label">Canvas</h1>
+          <!-- Progress -->
+          <h1 id="current-progress">Progress: 0/0</h1>
+          <!-- Canvas -->
+          <canvas id="painting-grid" width="40" height="30"></canvas>
+        </div>
+        <!-- Contains the pixel shop -->
+        <div id="pixel-shop-panel">
+          <!-- Buy autoclicker button -->
+          <button id="buy-autoclicker">Buy Auto Painter</button>
+        </div>
+        <!-- Contains the golden pixel shop -->
+        <div id="golden-pixel-shop">
+          <!-- Buy cool thing button -->
+          <button id="buy-cool">Buy Cool Thing</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Keep this because it's cool 
     <div id="sprites-holder"></div>
+    -->
   </body>
 </html>

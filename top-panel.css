@@ -1,0 +1,25 @@
+/* Make top panel be long and flexy */
+#top-panel {
+  /* Flex */
+  display: flex;
+  /* Makes it spread out evenly */
+  justify-content: space-evenly;
+  /* Give it a bit of color */
+  background-color: #e73e34;
+  /* Give it a bit of height */
+  padding: 1rem 0 1rem 0;
+  /* Make height consistent */
+  height: 3rem;
+}
+
+/* Change margin from headings in top panel */
+#top-panel h1 {
+  /* Remove margin */
+  margin: 0px;
+  /* Give background-color */
+  background-color: white;
+  /* Give it some padding */
+  padding: 0.15em 0.5em 0.15em 0.5em;
+  /* Give the border some nice round */
+  border-radius: 0.25em;
+}
